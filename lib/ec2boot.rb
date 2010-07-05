@@ -4,6 +4,7 @@ require 'fileutils'
 
 module EC2Boot
     class URLFetchFailed<RuntimeError;end
+    class URLNotFound<RuntimeError;end
 
     autoload :Config, "ec2boot/config"
     autoload :Data, "ec2boot/data"
