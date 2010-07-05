@@ -29,7 +29,7 @@ module EC2Boot
         end
 
         def self.write_facts(ud, md, config)
-            File.open(config.cache_dir + "/facts.txt", "w") do |facts|
+            File.open(config.facts_file, "w") do |facts|
 
                 if ud.fetched?
                     if ud.user_data.include?(:facts)
@@ -45,6 +45,10 @@ module EC2Boot
                     data.keys.sort.each do |k|
                         facts.puts("ec2_#{k}=#{data[k]}")
                     end
+                end
+
+                if data.include?("placement_availability_zone")
+                    facts.puts("ec2_placement_region=" + data["placement_availability_zone"].chop)
                 end
             end
         end
