@@ -24,6 +24,11 @@ This script when run from your init system will:
 The puppet action isn't shipped but can be supplied by your on the
 URL to the getcommands action.
 
+You should use this to do the basic bootstrap actions like get Puppet
+on your node, do the basic setup etc.  From there you'd configure the
+machine using Puppet.
+
+
 Actions:
 --------
 
