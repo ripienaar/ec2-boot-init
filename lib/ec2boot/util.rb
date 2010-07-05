@@ -32,9 +32,11 @@ module EC2Boot
             File.open(config.facts_file, "w") do |facts|
 
                 if ud.fetched?
-                    if ud.user_data.include?(:facts)
-                        ud.user_data[:facts].each_pair do |k,v|
-                            facts.puts("#{k}=#{v}")
+                    if ud.user_data.is_a?(Hash)
+                        if ud.user_data.include?(:facts)
+                            ud.user_data[:facts].each_pair do |k,v|
+                                facts.puts("#{k}=#{v}")
+                            end
                         end
                     end
                 end

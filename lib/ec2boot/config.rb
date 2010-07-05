@@ -10,6 +10,9 @@ module EC2Boot
             @facts_file = "/etc/facts.txt"
 
             @actions = Actions.new(self)
+
+
+            FileUtils.mkdir_p(@cache_dir)
         end
     end
 end
