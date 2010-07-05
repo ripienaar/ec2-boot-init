@@ -96,8 +96,8 @@ module EC2Boot
             if File.exist?(cache_file)
                 val = File.read(cache_file)
             else
-                val = Util.get_url(url)
-                File.open(cache_file, "w") {|f| f.puts val}
+                val = Util.get_url(url).chomp
+                File.open(cache_file, "w") {|f| f.print val}
             end
 
             val

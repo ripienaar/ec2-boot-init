@@ -1,7 +1,31 @@
 module EC2Boot
     class Util
         def self.get_url(url)
-            Net::HTTP.get URI.parse(url)
+            uri = URI.parse(url)
+            http = Net::HTTP.new(uri.host, uri.port)
+            http.open_timeout = 3
+            http.read_timeout = 3
+
+            retries = 5
+
+            begin
+                result = Net::HTTP.get URI.parse(url)
+                request = Net::HTTP::Get.new(uri.request_uri)
+                response = http.request(request)
+
+                raise URLNotFound if response.code == "404"
+                raise URLFetchFailed, "#{url}: #{response.code}" unless response.code == "200"
+
+                if response.code == "200"
+                    return response.body
+                else
+                    return ""
+                end
+            rescue URLFetchFailed => e
+                retries -= 1
+                sleep 1
+                retry if retries > 0
+            end
         end
 
         def self.write_facts(ud, md, config)

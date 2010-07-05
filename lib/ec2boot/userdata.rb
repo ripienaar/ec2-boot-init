@@ -20,6 +20,9 @@ module EC2Boot
             end
 
             @fetched = true
+        rescue URLNotFound
+            @user_data_raw = ""
+            @user_data = []
         end
     end
 end
