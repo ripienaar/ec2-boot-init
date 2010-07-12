@@ -1,11 +1,13 @@
-newaction("getcommands") do |cmd, ud, md, config|
+newaction("getactions") do |cmd, ud, md, config|
     if cmd.include?(:url)
         url = cmd[:url]
+
+        EC2Boot::Util.log("Fetching action list from #{url}")
 
         list = EC2Boot::Util.get_url(url)
 
         list.split("\n").each do |command|
-            puts "Fetching command: #{command}"
+            EC2Boot::Util.log("Fetching command: #{command}")
 
             body = EC2Boot::Util.get_url("#{url}/#{command}")
 

@@ -52,7 +52,7 @@ fi
 
 %preun 
 if [ "$1" = 0 ] ; then
-  /sbin/chkconfig --del mcollective || :
+  /sbin/chkconfig --del ec2-boot-init || :
 fi
 
 %files

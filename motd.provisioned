@@ -5,5 +5,11 @@
      
       Successfully provisioned Amazon instance.    
 
-        System facts are in /etc/facts.txt
+                ami: @@ami_id@@
+               type: @@instance_type@@
+                one: @@placement_availability_zone@@
+           hostname: @@hostname@@
+    public hostname: @@public_hostname@@
+
+         System facts are in /etc/facts.txt
 

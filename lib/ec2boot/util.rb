@@ -57,6 +57,27 @@ module EC2Boot
             system("logger msg")
         end
 
+        # updates the motd, updates all @@foo@@ variables
+        # with data from the facts
+        def self.update_motd(ud, md, config)
+            templ = File.readlines(config.motd_template)
+
+            File.open(config.motd_file, "w") do |motd|
+                templ.each do |line|
+                    if md.fetched?
+                        line.gsub!(/@@ami_id@@/, md.flat_data["ami_id"])
+                        line.gsub!(/@@instance_type@@/, md.flat_data["instance_type"])
+                        line.gsub!(/@@placement_availability_zone@@/, md.flat_data["placement_availability_zone"])
+                        line.gsub!(/@@hostname@@/, md.flat_data["hostname"])
+                        line.gsub!(/@@public_hostname@@/, md.flat_data["public_hostname"])
+                    end
+
+                    motd.write line
+                end
+            end
+        end
+
+        # writes out the facts file
         def self.write_facts(ud, md, config)
             File.open(config.facts_file, "w") do |facts|
 

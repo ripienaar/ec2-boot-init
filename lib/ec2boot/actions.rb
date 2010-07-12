@@ -22,9 +22,11 @@ module EC2Boot
 
                             if respond_to?(meth)
                                 begin
+                                    Util.log("Running action #{type}")
+
                                     send(meth, action, ud, md, config)
                                 rescue Exception => e
-                                    Util.log("Failed to run action #{meth}: #{e.class}: #{e}")
+                                    Util.log("Failed to run action #{type}: #{e.class}: #{e}")
                                 end
                             else
                                 # no such method
