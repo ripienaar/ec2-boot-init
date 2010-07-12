@@ -1,6 +1,15 @@
 module EC2Boot
     class Util
-        def self.get_url(url)
+        # Fetches a url, it will retry 5 times if it still
+        # failed it will return ""
+        #
+        # If an optional file is specified it will write
+        # the retrieved data into the file in an efficient way
+        # in this case return data will be true or false
+        #
+        # raises URLNotFound for 404s and URLFetchFailed for
+        # other non 200 status codes
+        def self.get_url(url, file=nil)
             uri = URI.parse(url)
             http = Net::HTTP.new(uri.host, uri.port)
             http.open_timeout = 3
@@ -9,23 +18,43 @@ module EC2Boot
             retries = 5
 
             begin
-                result = Net::HTTP.get URI.parse(url)
-                request = Net::HTTP::Get.new(uri.request_uri)
-                response = http.request(request)
+                if file
+                    dest_file = File.open(file, "w")
+                    response = http.get(uri.path) do |r|
+                        dest_file.write r
+                    end
+                    close dest_file
+                else
+                    response = http.get(uri.path)
+                end
 
                 raise URLNotFound if response.code == "404"
                 raise URLFetchFailed, "#{url}: #{response.code}" unless response.code == "200"
 
                 if response.code == "200"
-                    return response.body
+                    if file
+                        return true
+                    else
+                        return response.body
+                    end
                 else
-                    return ""
+                    if file
+                        return false
+                    else
+                        return ""
+                    end
                 end
             rescue URLFetchFailed => e
                 retries -= 1
                 sleep 1
                 retry if retries > 0
             end
+        end
+
+        # Logs to stdout and syslog
+        def self.log(msg)
+            puts "#{Time.now}> #{msg}"
+            system("logger msg")
         end
 
         def self.write_facts(ud, md, config)
