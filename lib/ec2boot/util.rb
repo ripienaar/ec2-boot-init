@@ -23,7 +23,7 @@ module EC2Boot
                     response = http.get(uri.path) do |r|
                         dest_file.write r
                     end
-                    close dest_file
+                    dest_file.close
                 else
                     response = http.get(uri.path)
                 end
