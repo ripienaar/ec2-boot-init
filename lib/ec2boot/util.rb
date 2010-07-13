@@ -12,8 +12,6 @@ module EC2Boot
         def self.get_url(url, file=nil)
             uri = URI.parse(url)
             http = Net::HTTP.new(uri.host, uri.port)
-            http.open_timeout = 3
-            http.read_timeout = 3
 
             retries = 5
 
@@ -44,6 +42,11 @@ module EC2Boot
                         return ""
                     end
                 end
+            rescue Timeout::Error => e
+                retries -= 1
+                sleep 1
+                retry if retries > 0
+
             rescue URLFetchFailed => e
                 retries -= 1
                 sleep 1
