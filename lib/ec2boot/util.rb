@@ -57,7 +57,7 @@ module EC2Boot
         # Logs to stdout and syslog
         def self.log(msg)
             puts "#{Time.now}> #{msg}"
-            system("logger msg")
+            system("logger #{msg}")
         end
 
         # updates the motd, updates all @@foo@@ variables
