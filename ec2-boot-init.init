@@ -2,7 +2,7 @@
 #
 # ec2-boot-init	Bootstrapper for EC2
 #
-# chkconfig: 345 24 76
+# chkconfig: 345 60 76
 #
 # description: Bootstraps EC2 instances in a way that enables you to
 #              customise a standard image into different configurations
