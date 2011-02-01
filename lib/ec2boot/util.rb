@@ -12,6 +12,7 @@ module EC2Boot
         def self.get_url(url, file=nil)
             uri = URI.parse(url)
             http = Net::HTTP.new(uri.host, uri.port)
+            http.use_ssl = (uri.scheme == 'https')
 
             retries = 5
 
