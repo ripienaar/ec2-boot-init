@@ -3,16 +3,16 @@ newaction("getactions") do |cmd, ud, md, config|
         url = cmd[:url]
         list = cmd[:list]
 
-        EC2Boot::Util.log("Fetching action list (#{list}) from #{url}")
+        EC2Boot::Util.log("Fetching action list (#{list}) from action root: #{url}")
 
         list = EC2Boot::Util.get_url("#{url}/#{list}")
 
-        list.split("\n").each do |command|
-            EC2Boot::Util.log("Fetching command: #{command}")
+        list.split("\n").each do |action|
+            EC2Boot::Util.log("Fetching action from action root: #{action}")
 
-            body = EC2Boot::Util.get_url("#{url}/#{command}")
+            body = EC2Boot::Util.get_url("#{url}/#{action}")
 
-            File.open(config.actions_dir + "/#{command}", "w") do |f|
+            File.open(config.actions_dir + "/#{action}", "w") do |f|
                 f.print body
             end
         end
