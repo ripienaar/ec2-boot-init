@@ -72,6 +72,8 @@ task :rpm => [:clean, :doc, :package] do
     case lsbdistro
         when 'CentOS'
             rpmdist = ".el#{lsbdistrel}"
+        when 'AmazonAMI'
+            rpmdist = '.amzn1'
         else
             rpmdist = ""
     end
