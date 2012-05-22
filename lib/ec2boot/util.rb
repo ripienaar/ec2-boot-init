@@ -102,10 +102,10 @@ module EC2Boot
           data.keys.sort.each do |k|
             facts.puts("ec2_#{k}=#{data[k]}")
           end
-        end
 
-        if data.include?("placement_availability_zone")
-          facts.puts("ec2_placement_region=" + data["placement_availability_zone"].chop)
+          if data.include?("placement_availability_zone")
+            facts.puts("ec2_placement_region=" + data["placement_availability_zone"].chop)
+          end
         end
       end
     end
