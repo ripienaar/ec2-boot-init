@@ -6,10 +6,11 @@ A script to help bootstrap generic EC2 instances into specific ones.
 The basic idea is that you submit some user data in the form:
 
 <pre>
---- 
-:facts: 
+---
+:facts:
   foo: bar
-:actions: 
+:write_ec2_facts: true
+:actions:
 - :type: :getactions
   :url: http://your.net/ec2actions/
   :list: list.txt
@@ -25,8 +26,8 @@ This script when run from your init system will:
 The getactions action is shipped with this script. You can supply
 your own actions in the action list ("list.txt"). Actions should be
 supplied relative to action root URL ("http://your.net/ec2actions/")
-so that e.g. action "puppet.rb" in action list "list.txt" is located 
-at "http://your.net/ec2actions/puppet.rb". 
+so that e.g. action "puppet.rb" in action list "list.txt" is located
+at "http://your.net/ec2actions/puppet.rb".
 
 You should use this to do the basic bootstrap actions like get Puppet
 on your node, do the basic setup etc.  From there you'd configure the
@@ -36,7 +37,7 @@ machine using Puppet.
 Actions:
 --------
 
-Actions are written in ruby, here's a simple one that execute a 
+Actions are written in ruby, here's a simple one that execute a
 shell command:
 
 <pre>
@@ -50,10 +51,8 @@ end
 Facts:
 ------
 
-Once run all the EC2 meta data and user data are cached locally
-and a file /etc/facts.txt gets written in a list of key=value pairs.
-
-Ideal for importing in tools like Facter.
+Facts passed in via the YAML will be written to /etc/facts.txt, if you set
+:write_ec2_facts it will also write all the ec2 meta data into this file
 
 Status:
 -------

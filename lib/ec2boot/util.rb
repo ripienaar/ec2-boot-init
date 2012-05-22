@@ -83,19 +83,20 @@ module EC2Boot
 
     # writes out the facts file
     def self.write_facts(ud, md, config)
-      File.open(config.facts_file, "w") do |facts|
+      write_ec2_facts = false
 
+      File.open(config.facts_file, "w") do |facts|
         if ud.fetched?
-          if ud.user_data.is_a?(Hash)
-            if ud.user_data.include?(:facts)
-              ud.user_data[:facts].each_pair do |k,v|
-                facts.puts("#{k}=#{v}")
-              end
+          if ud.user_data[:facts]
+            ud.user_data[:facts].each_pair do |k,v|
+              facts.puts("#{k}=#{v}")
             end
           end
         end
 
-        if md.fetched?
+        # only write the ec2 facts if configured to do so
+        # since it seems puppet has fixed its broken facts
+        if md.fetched? && ud.user_data[:write_ec2_facts]
           data = md.flat_data
 
           data.keys.sort.each do |k|

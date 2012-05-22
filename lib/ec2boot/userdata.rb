@@ -3,7 +3,7 @@ module EC2Boot
     attr_reader :user_data, :user_data_raw
 
     def initialize(config)
-      @user_data = nil
+      @user_data = {}
 
       super(config)
 
@@ -19,10 +19,13 @@ module EC2Boot
         ud.puts @user_data_raw
       end
 
+      # user data has to be a hash, if its not its rubbish - empty it out
+      @user_data = {} unless @user_data.is_a?(Hash)
+
       @fetched = true
     rescue URLNotFound
       @user_data_raw = ""
-      @user_data = []
+      @user_data = {}
     end
   end
 end
