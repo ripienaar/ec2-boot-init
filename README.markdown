@@ -10,19 +10,23 @@ The basic idea is that you submit some user data in the form:
 :facts: 
   foo: bar
 :actions: 
-- :url: http://your.net/ec2commands/
-  :type: :getcommands
-- :master: puppet.your.net
-  :type: :puppet
+- :type: :getactions
+  :url: http://your.net/ec2actions/
+  :list: list.txt
+- :type: :puppet
+  :master: puppet.your.net
 </pre>
 
 This script when run from your init system will:
 
- * Connect to http://your.net/ec2commands/ and fetch a bunch of actions
- * Run the action called "puppet" passing the variable master into it
+ * Get list of actions ("list.txt") from action root URL "http://your.net/ec2actions/"
+ * Run action "puppet" passing the variable master into it (example only)
 
-The puppet action isn't shipped but can be supplied by your on the
-URL to the getcommands action.
+The getactions action is shipped with this script. You can supply
+your own actions in the action list ("list.txt"). Actions should be
+supplied relative to action root URL ("http://your.net/ec2actions/")
+so that e.g. action "puppet.rb" in action list "list.txt" is located 
+at "http://your.net/ec2actions/puppet.rb". 
 
 You should use this to do the basic bootstrap actions like get Puppet
 on your node, do the basic setup etc.  From there you'd configure the
